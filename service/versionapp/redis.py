@@ -1,9 +1,9 @@
 from django.core.cache import cache
 
 class RedisClient:
-    def write(self, key, value, timeoutms):
+    def write(self, key, value):
         try:
-            cache.set(key, value, timeoutms)
+            cache.set(key, value)
         except Exception as e:
             print(e)
 

@@ -17,5 +17,6 @@ from django.urls import path
 from . import requests
 
 urlpatterns = [
-    path('set/', requests.request_get_version, name='get_version'),
+    path('set/', requests.request_set_version, name='set_version'),
+    path('get/', requests.request_get_version, name='get_version'),
 ]
