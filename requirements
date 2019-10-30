@@ -3,6 +3,7 @@ djangorestframework
 pyDes
 PyMySQL
 redis
+django-redis
 requests
 pymssql
 pyodbc
