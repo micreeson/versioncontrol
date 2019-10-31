@@ -18,5 +18,7 @@ from . import requests
 
 urlpatterns = [
     path('set/', requests.request_set_version, name='set_version'),
+    path('release', requests.request_set_version, name='release_version'),
     path('get/', requests.request_get_version, name='get_version'),
+    path('checkuser', requests.request_get_version, name='check_user_version'),
 ]
