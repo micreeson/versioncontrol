@@ -26,8 +26,8 @@ class Version:
         self.save_app_version_date(appid, date, version)
 
         self.retrun_obj.resultCode = "OK"
-        self.retrun_obj.version = self.get_latest_version(appid)
-        self.retrun_obj.releaseNote = self.get_latest_note(appid)
+        self.retrun_obj.version = self.read_latest_version(appid)
+        self.retrun_obj.releaseNote = self.read_latest_note(appid)
 
     def save_app_version_release_note(self, appid, note, version):
         # 记录当前app的版本号的发布说明
@@ -48,7 +48,7 @@ class Version:
     #设置某个app的用户版本信息
     def save_user_version(self, appid, userid):
         key = self.gen_user_version_key(appid, userid)
-        current_ver = self.get_latest_version(appid)
+        current_ver = self.read_latest_version(appid)
         self.redis_obj.write(key, current_ver)
 
     #获取某个app的用户的版本信息
@@ -87,21 +87,21 @@ class Version:
         return 'VERSIONCONTROL#' + appid + '#' + version + '#DATE'
 
     #获取app的最新版本号
-    def get_latest_version(self, appid):
+    def read_latest_version(self, appid):
         key = self.gen_version_key(appid)
         return self.redis_obj.read(key)
 
     #获取app最新版本的发布说明
-    def get_latest_note(self,appid):
-        version = self.get_latest_version(appid)
+    def read_latest_note(self, appid):
+        version = self.read_latest_version(appid)
         key = self.gen_release_note_key(appid, version)
         note = self.redis_obj.read(key)
 
         return note
 
     #获取app最新版本的发布日期
-    def get_latest_date(self, appid):
-        version = self.get_latest_version(appid)
+    def read_latest_date(self, appid):
+        version = self.read_latest_version(appid)
         key = self.gen_release_date_key(appid, version)
         note = self.redis_obj.read(key)
 
@@ -111,7 +111,7 @@ class Version:
     def get_version(self, appid, userid):
         self.retrun_obj.clear()
         #appid是否存在，不存在则返回错误
-        latest_version = self.get_latest_version(appid)
+        latest_version = self.read_latest_version(appid)
         if latest_version is None:
             self.retrun_obj.resultCode = "False"
             self.retrun_obj.message = "Invalid appid"
@@ -124,10 +124,28 @@ class Version:
             self.save_user_version(appid, userid)
             self.retrun_obj.resultCode = "False"
             self.retrun_obj.message = "Get new version"
-            self.retrun_obj.version = self.get_latest_version(appid)
-            self.retrun_obj.releaseNote = self.get_latest_note(appid)
-            self.retrun_obj.releaseDate = self.get_latest_date(appid)
+            self.retrun_obj.version = self.read_latest_version(appid)
+            self.retrun_obj.releaseNote = self.read_latest_note(appid)
+            self.retrun_obj.releaseDate = self.read_latest_date(appid)
         else:
             self.retrun_obj.resultCode = "OK"
             self.retrun_obj.message = "Latest version"
+
+    # 获取指定用户的版本信息，判断用户是否已经获取版本信息，新用户返回版本号和发布说明，已经获取过的用户返回错误
+    def get_latest_version(self, appid):
+        self.retrun_obj.clear()
+        # appid是否存在，不存在则返回错误
+        latest_version = self.read_latest_version(appid)
+        if latest_version is None:
+            self.retrun_obj.resultCode = "False"
+            self.retrun_obj.message = "Invalid appid"
+            return False
+
+        self.retrun_obj.resultCode = "OK"
+        self.retrun_obj.message = "Latest version"
+        self.retrun_obj.version = self.read_latest_version(appid)
+        self.retrun_obj.releaseNote = self.read_latest_note(appid)
+        self.retrun_obj.releaseDate = self.read_latest_date(appid)
+
+        return True
 

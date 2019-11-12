@@ -21,4 +21,5 @@ urlpatterns = [
     path('release', requests.request_set_version, name='release_version'),
     path('get/', requests.request_get_version, name='get_version'),
     path('checkuser', requests.request_get_version, name='check_user_version'),
+    path('latest', requests.request_get_latest_version, name='latest_version'),
 ]

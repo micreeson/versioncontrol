@@ -22,3 +22,12 @@ def request_get_version(request):
     version_obj.get_version(app_id, user_id)
     json_data = json.dumps(version_obj.retrun_obj.__dict__)
     return HttpResponse(json_data, content_type="application/json")
+
+
+def request_get_latest_version(request):
+    app_id = request.GET.get("appid")
+
+    version_obj = Version()
+    version_obj.get_latest_version(app_id)
+    json_data = json.dumps(version_obj.retrun_obj.__dict__)
+    return HttpResponse(json_data, content_type="application/json")
