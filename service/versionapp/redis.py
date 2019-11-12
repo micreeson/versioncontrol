@@ -4,6 +4,8 @@ class RedisClient:
     def write(self, key, value):
         try:
             cache.set(key, value)
+            cache.persist(key)
+
         except Exception as e:
             print(e)
 
