@@ -6,11 +6,12 @@ RUN mkdir /code \
 &&apt-get -y install unixodbc-dev \
 &&apt-get -y install vim
 
+COPY requirements /code
 RUN pip install -r /code/requirements -i https://pypi.douban.com/simple
 
 COPY service /code
 COPY run.sh /code
-COPY requirements /code
+
 WORKDIR /code
 
 CMD ["/bin/bash","run.sh"]
