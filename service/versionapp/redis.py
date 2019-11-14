@@ -5,6 +5,8 @@ class RedisClient:
         try:
             cache.set(key, value)
             cache.persist(key)
+            print("key is:", key)
+            print("value is:", value)
 
         except Exception as e:
             print(e)
